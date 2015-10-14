@@ -12,7 +12,7 @@
 namespace Cilex\Tests;
 
 use Cilex\Application;
-use Cilex\Command\AccountCommand;
+use Cilex\Command\AccountOpenCommand;
 
 /**
  * Application test cases.
@@ -61,15 +61,15 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      * Tests the command method to see if the command is properly set and the
      * Cilex application is added as container.
      */
-    public function testCommand()
+    public function testAccountOpenCommand()
     {
-        $this->assertFalse($this->app['console']->has('bank:account'));
+        $this->assertFalse($this->app['console']->has('account:open'));
 
-        $this->app->command(new AccountCommand());
+        $this->app->command(new AccountOpenCommand());
 
-        $this->assertTrue($this->app['console']->has('bank:account'));
+        $this->assertTrue($this->app['console']->has('account:open'));
 
-        $this->assertSame($this->app, $this->app['console']->get('bank:account')->getContainer());
+        $this->assertSame($this->app, $this->app['console']->get('account:open')->getContainer());
     }
 
 }

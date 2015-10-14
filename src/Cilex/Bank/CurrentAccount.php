@@ -9,31 +9,83 @@ namespace Cilex\Bank;
 
 class CurrentAccount extends \Cilex\Bank\Account
 {
-    protected $overdraftValue   = 0;
+    protected $overdraftLimit   = 0;
     
-    public function __construct($accountNumber, $overdraftValue = 0) 
+    public function __construct($accountNumber) 
     {
         parent::__construct($accountNumber);
+    }
+    
+    /**
+     * withdraw - withdraws funds from the account
+     *
+     * @param double $withdrawAmount amount to withdraw
+     * @return boolean
+     */
+    public function withdraw($withdrawAmount) {
         
-        $this->setOverdraftValue($overdraftValue);
+        if($this->hasFunds($withdrawAmount)) {
+            
+            $this->updateBalance($withdrawAmount);
+            
+            return true;
+        }
+        
+        return false;
     }
     
-    public function withdraw() {
-        parent::withdraw();
-    }
-    
-    public function setOverdraftValue($value)
+    /**
+     * hasFunds - returns whether the account has funds to withdraw
+     *
+     * @param double $withdrawAmount - amount of money to withdraw from the funds
+     *
+     * @return boolean
+     */
+    public function hasFunds($withdrawAmount = 0.00)
     {
-        $this->overdraftValue = $value;
+        if ($withdrawAmount < $this->getBalance()) {
+            return true;
+        } elseif ($this->hasOverdraft() && $withdrawAmount < ($this->getBalance()+$this->overdraftLimit)) {
+            return true;
+        }
+        
+        return false;
     }
     
-    public function getOverdraftValue()
+    /**
+     * setOverdraftLimit - sets the limit the account can go over
+     *
+     * @param int $value
+     * @return boolean
+     */
+    public function setOverdraftLimit($value)
     {
-        return $this->overdraftValue;
+        if (is_double($value)) {
+            $this->overdraftLimit = $value;
+        
+            return true;
+        }
+        
+        return false;
     }
     
+    /**
+     * getOverdraftLimit - returns the current overdraft limit
+     *
+     * @return double
+     */
+    public function getOverdraftLimit()
+    {
+        return (double) $this->overdraftLimit;
+    }
+    
+    /**
+     * hasOverdraft - whther this account has a overdraft
+     *
+     * @return boolean
+     */
     public function hasOverdraft()
     {
-        return ($this->overdraftValue > 0)? true : false;
+        return ($this->overdraftLimit > 0)? true : false;
     }
 }

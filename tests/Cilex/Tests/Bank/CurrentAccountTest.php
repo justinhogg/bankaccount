@@ -47,126 +47,141 @@ class CurrentAccountTest extends \PHPUnit_Framework_TestCase
     
     /**
      * Tests whether the constructor instantiates the correct dependencies.
+     * @covers Cilex\Bank\CurrentAccount::__construct
      */
     public function testConstruct()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-    
-    public function testOpenNewAccount()
-    {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-    
-    public function testOpenNewAccountWithOverdraft()
-    {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-    
-    public function testOpenNewBadAccount()
-    {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-    /**
-     * @covers Cilex\Bank\CurrentAccount::open
-     * @covers Cilex\Bank\CurrentAccount::close
-     * @covers Cilex\Bank\CurrentAccount::isClosed
-     */
-    public function testCloseAccount()
-    {   
-        //open account
-        $this->object->open();
-        
-        $this->assertTrue($this->object->isOpen());
-        
-        //close object
-        $this->object->close();
-        
-        $this->assertFalse($this->object->isOpen());
+        $this->assertEquals('1234567890', $this->object->getAccountNumber());
     }
     
     /**
-     * @covers Cilex\Bank\CurrentAccount::isClosed
+     * @covers Cilex\Bank\CurrentAccount::withdraw
+     * @covers Cilex\Bank\CurrentAccount::hasFunds
+     * @covers Cilex\Bank\Account::deposit
+     * @covers Cilex\Bank\Account::updateBalance
+     * @covers Cilex\Bank\Account::getBalance
      */
-    public function testAccountisClosedByDefault()
-    {   
-        $this->assertFalse($this->object->isOpen());
-    }
-    
-    public function testCloseBadAccount()
-    {     
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-    
-    public function testGetBalance()
-    {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-    
-    public function testDeposit()
-    {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-    
-    public function testDepositInvalidValue()
-    {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-    
     public function testWithdrawFunds()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->object->deposit(10.00);
+        
+        $this->assertTrue($this->object->withdraw(5.25));
+        
+        $this->assertEquals(4.75, $this->object->getBalance());
     }
     
+    /**
+     * @covers Cilex\Bank\CurrentAccount::withdraw
+     * @covers Cilex\Bank\CurrentAccount::hasFunds
+     * @covers Cilex\Bank\Account::deposit
+     * @covers Cilex\Bank\Account::getBalance
+     */
     public function testWithdrawFundsGreaterThanBalance()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->object->deposit(10.00);
+        
+        $this->assertFalse($this->object->withdraw(15.00));
+        
+        $this->assertEquals(10.00, $this->object->getBalance());
     }
     
+    /**
+     * @covers Cilex\Bank\CurrentAccount::withdraw
+     * @covers Cilex\Bank\CurrentAccount::hasFunds
+     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     * @covers Cilex\Bank\Account::getBalance
+     */
     public function testWithdrawFundsGreaterThanBalanceWithOverdraft()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->object->setOverdraftLimit(10.00);
+        
+        $this->assertTrue($this->object->withdraw(5.00));
+        
+        $this->assertEquals(-5.00, $this->object->getBalance());
     }
     
-    public function testSetOverdraft()
+    /**
+     * @covers Cilex\Bank\CurrentAccount::hasFunds
+     * @covers Cilex\Bank\Account::deposit
+     */
+    public function testHasFunds()
     {
-        // Stop here and mark this test as incomplete.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+        $this->object->deposit(10.00);
+        
+        $this->assertTrue($this->object->hasFunds());
+    }
+    
+    /**
+     * @covers Cilex\Bank\CurrentAccount::hasFunds
+     */
+    public function testHasNoFunds()
+    {
+        $this->assertFalse($this->object->hasFunds(50.00));
+    }
+    
+    /**
+     * @covers Cilex\Bank\CurrentAccount::hasFunds
+     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     */
+    public function testHasNoFundsButOverdraft()
+    {
+        $this->object->setOverdraftLimit(100.00);
+        
+        $this->assertTrue($this->object->hasFunds(50.00));
+    }
+    
+    /**
+     * @covers Cilex\Bank\CurrentAccount::hasOverdraft
+     */
+    public function testhasNoOverdraft()
+    {
+        $this->assertFalse($this->object->hasOverdraft());
+    }
+    
+    /**
+     * @covers Cilex\Bank\CurrentAccount::hasOverdraft
+     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     */
+    public function testhasOverdraft()
+    {
+        $this->object->setOverdraftLimit((double) 150.00);
+        
+        $this->assertTrue($this->object->hasOverdraft());
+    }
+    
+    /**
+     * @covers Cilex\Bank\CurrentAccount::getOverdraftLimit
+     */
+    public function testGetDefaultOverdraftLimit()
+    {
+        $this->assertEquals(0, $this->object->getOverdraftLimit());
+    }
+    
+    /**
+     * @covers Cilex\Bank\CurrentAccount::getOverdraftLimit
+     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     */
+    public function testGetOverdraftLimit()
+    {
+        $this->object->setOverdraftLimit((double) 150.00);
+        
+        $this->assertEquals(150.00, $this->object->getOverdraftLimit());
+    }
+    
+    /**
+     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     */
+    public function testSetOverdraftLimit()
+    {
+        $this->assertTrue($this->object->setOverdraftLimit((double) 100.00));
+    }
+    
+    /**
+     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     */
+    public function testSetBadOverdraftLimit()
+    {
+        $this->assertFalse($this->object->setOverdraftLimit('100'));
     }
 }
    

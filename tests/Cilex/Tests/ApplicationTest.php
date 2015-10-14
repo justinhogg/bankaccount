@@ -12,7 +12,7 @@
 namespace Cilex\Tests;
 
 use Cilex\Application;
-use Cilex\Command\GreetCommand;
+use Cilex\Command\AccountCommand;
 
 /**
  * Application test cases.
@@ -63,13 +63,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testCommand()
     {
-        $this->assertFalse($this->app['console']->has('demo:greet'));
+        $this->assertFalse($this->app['console']->has('bank:account'));
 
-        $this->app->command(new GreetCommand());
+        $this->app->command(new AccountCommand());
 
-        $this->assertTrue($this->app['console']->has('demo:greet'));
+        $this->assertTrue($this->app['console']->has('bank:account'));
 
-        $this->assertSame($this->app, $this->app['console']->get('demo:greet')->getContainer());
+        $this->assertSame($this->app, $this->app['console']->get('bank:account')->getContainer());
     }
 
 }

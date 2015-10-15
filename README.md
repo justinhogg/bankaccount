@@ -31,4 +31,4 @@ __--overdraft__ - Display the overdraft limit of the account.
 
 To run this command from the root directory:
 
-```./vendor/bin/phpunit```
+```/vendor/bin/phpunit```

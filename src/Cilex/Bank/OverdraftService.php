@@ -2,7 +2,7 @@
 /**
  * Description of OverdraftService
  *
- * @author Justin Hogg <justin@thekordas.com.com>
+ * @author Justin Hogg <justin@thekordas.com>
  */
 
 namespace Cilex\Bank;

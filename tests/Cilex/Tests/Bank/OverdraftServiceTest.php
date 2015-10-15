@@ -2,7 +2,7 @@
 /**
  * Description of OverdraftServiceTest
  *
- * @author jhogg
+ * @author Justin Hogg <justin@thekordas.com>
  */
 
 namespace Cilex\Tests\Bank;

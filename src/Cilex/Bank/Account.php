@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * @author jhogg
+ * @author Justin Hogg <justin@thekordas.com>
  */
 namespace Cilex\Bank;
 
@@ -38,7 +38,7 @@ abstract class Account {
      */
     public function getBalance()
     {
-        return (double) $this->totalBalance;
+        return (double) money_format('%.2n',$this->totalBalance);
     }
     
     /**

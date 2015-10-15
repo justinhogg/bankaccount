@@ -2,7 +2,7 @@
 /**
  * Description of CurrentAccountTest
  *
- * @author jhogg
+ * @author Justin Hogg <justin@thekordas.com>
  */
 
 namespace Cilex\Tests\Bank;

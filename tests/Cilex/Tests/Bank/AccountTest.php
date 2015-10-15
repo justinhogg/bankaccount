@@ -2,12 +2,10 @@
 /**
  * Description of AccountTest
  *
- * @author jhogg
+ * @author Justin Hogg <justin@thekordas.com>
  */
 
 namespace Cilex\Tests\Bank;
-
-use Cilex\Bank\Account;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {

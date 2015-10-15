@@ -2,7 +2,7 @@
 /**
  * Description of CurrentAccount
  *
- * @author jhogg
+ * @author Justin Hogg <justin@thekordas.com>
  */
 
 namespace Cilex\Bank;
@@ -73,5 +73,15 @@ class CurrentAccount extends \Cilex\Bank\Account
     public function hasOverdraft()
     {
         return ($this->overdraft !== null) ? $this->overdraft->isEnabled(): false;
+    }
+    
+    /**
+     * getOverdraft - get the overdraft limit
+     *
+     * @return double
+     */
+    public function getOverdraftLimit()
+    {
+        return ($this->overdraft !== null) ? $this->overdraft->getLimit(): 0.00;
     }
 }

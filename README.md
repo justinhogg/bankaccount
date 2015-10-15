@@ -1,22 +1,25 @@
 # bankaccount
 A simple command line interface bank account
 
-## Installation
+### Installation
 
 git clone this repository.
+
 Download composer: curl -s https://getcomposer.org/installer | php
+
 Install dependencies: php composer.phar install
 
-## Commands
+### Commands
 
 *account*
-  __account:open__ - Open a new bank account.
-To run these commands: php bank.php account:open
+*__account:open__ - Open a new bank account.
 
-## Options
+To run these commands: __php bank.php account:open__ from the root directory.
 
-__--balance__ - returns the balance of the account with any command
+### Options
 
-## Unit Tests
+__--balance__ - returns the balance of the account.
 
-run ./vendor/bin/phpunit from the root directory
+### Unit Tests
+
+run __./vendor/bin/phpunit__ from the root directory

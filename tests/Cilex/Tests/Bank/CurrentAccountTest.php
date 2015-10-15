@@ -28,6 +28,12 @@ class CurrentAccountTest extends \PHPUnit_Framework_TestCase
     protected $attributes;
     
     /**
+     *
+     * @var class
+     */
+    protected $mockOverdraftObject;
+    
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
@@ -35,6 +41,24 @@ class CurrentAccountTest extends \PHPUnit_Framework_TestCase
     {
         //set up test object
         $this->object = new CurrentAccount('1234567890');
+        $this->mockOverdraftObject = $this->getMock('\Cilex\Bank\OverdraftService', array('setLimit', 'getLimit', 'isEnabled'),array($this->object));
+        
+        switch($this->getName()) {
+            case 'testWithdrawFundsGreaterThanBalanceWithOverdraft':
+            case 'testHasNoFundsButOverdraft':
+            case 'testhasOverdraft':    
+                $this->mockOverdraftObject->expects($this->once())->method('setLimit')->will($this->returnValue(true));
+                $this->mockOverdraftObject->expects($this->any())->method('getLimit')->will($this->returnValue(10.00));
+                $this->mockOverdraftObject->expects($this->once())->method('isEnabled')->will($this->returnValue(true));
+                $this->object->setOverdraft($this->mockOverdraftObject, 10.00);
+                break;
+            case 'testSetOverdraftLimit':
+                $this->mockOverdraftObject->expects($this->once())->method('setLimit')->will($this->returnValue(true));
+                break;
+            case 'testSetBadOverdraftLimit':
+                $this->mockOverdraftObject->expects($this->once())->method('setLimit')->will($this->returnValue(false));
+                break;
+        }
     }
     
     /**
@@ -88,13 +112,11 @@ class CurrentAccountTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Cilex\Bank\CurrentAccount::withdraw
      * @covers Cilex\Bank\CurrentAccount::hasFunds
-     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     * @covers Cilex\Bank\CurrentAccount::setOverdraft
      * @covers Cilex\Bank\Account::getBalance
      */
     public function testWithdrawFundsGreaterThanBalanceWithOverdraft()
     {
-        $this->object->setOverdraftLimit(10.00);
-        
         $this->assertTrue($this->object->withdraw(5.00));
         
         $this->assertEquals(-5.00, $this->object->getBalance());
@@ -121,13 +143,11 @@ class CurrentAccountTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @covers Cilex\Bank\CurrentAccount::hasFunds
-     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     * @covers Cilex\Bank\CurrentAccount::setOverdraft
      */
     public function testHasNoFundsButOverdraft()
     {
-        $this->object->setOverdraftLimit(100.00);
-        
-        $this->assertTrue($this->object->hasFunds(50.00));
+        $this->assertTrue($this->object->hasFunds(5.00));
     }
     
     /**
@@ -140,48 +160,27 @@ class CurrentAccountTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @covers Cilex\Bank\CurrentAccount::hasOverdraft
-     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     * @covers Cilex\Bank\CurrentAccount::setOverdraft
      */
     public function testhasOverdraft()
     {
-        $this->object->setOverdraftLimit((double) 150.00);
-        
         $this->assertTrue($this->object->hasOverdraft());
     }
     
     /**
-     * @covers Cilex\Bank\CurrentAccount::getOverdraftLimit
-     */
-    public function testGetDefaultOverdraftLimit()
-    {
-        $this->assertEquals(0, $this->object->getOverdraftLimit());
-    }
-    
-    /**
-     * @covers Cilex\Bank\CurrentAccount::getOverdraftLimit
-     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
-     */
-    public function testGetOverdraftLimit()
-    {
-        $this->object->setOverdraftLimit((double) 150.00);
-        
-        $this->assertEquals(150.00, $this->object->getOverdraftLimit());
-    }
-    
-    /**
-     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     * @covers Cilex\Bank\CurrentAccount::setOverdraft
      */
     public function testSetOverdraftLimit()
     {
-        $this->assertTrue($this->object->setOverdraftLimit((double) 100.00));
+        $this->assertTrue($this->object->setOverdraft($this->mockOverdraftObject, 10.00));
     }
     
     /**
-     * @covers Cilex\Bank\CurrentAccount::setOverdraftLimit
+     * @covers Cilex\Bank\CurrentAccount::setOverdraft
      */
     public function testSetBadOverdraftLimit()
     {
-        $this->assertFalse($this->object->setOverdraftLimit('100'));
+        $this->assertFalse($this->object->setOverdraft($this->mockOverdraftObject, '100'));
     }
 }
    

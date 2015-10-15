@@ -9,7 +9,7 @@ namespace Cilex\Bank;
 
 class CurrentAccount extends \Cilex\Bank\Account
 {
-    protected $overdraftLimit   = 0.00;
+    private $overdraft  = null;
     
     public function __construct($accountNumber) 
     {
@@ -45,7 +45,7 @@ class CurrentAccount extends \Cilex\Bank\Account
     {
         if ($withdrawAmount < $this->getBalance()) {
             return true;
-        } elseif ($this->hasOverdraft() && $withdrawAmount < ($this->getBalance()+$this->overdraftLimit)) {
+        } elseif ($this->hasOverdraft() && $withdrawAmount < ($this->getBalance()+$this->overdraft->getLimit())) {
             return true;
         }
         
@@ -53,32 +53,18 @@ class CurrentAccount extends \Cilex\Bank\Account
     }
     
     /**
-     * setOverdraftLimit - sets the limit the account can go over
+     * setOverdraft - sets the overdraft for this account
      *
-     * @param int $value
+     * @param \Cilex\Bank\OverdraftService $overdraft
+     * @param double $amount
      * @return boolean
      */
-    public function setOverdraftLimit($value)
-    {
-        if (is_double($value)) {
-            $this->overdraftLimit = $value;
+    public function setOverdraft(\Cilex\Bank\OverdraftService $overdraft, $amount) {
         
-            return true;
-        }
-        
-        return false;
+        $this->overdraft = $overdraft;
+        return $this->overdraft->setLimit($amount);
     }
-    
-    /**
-     * getOverdraftLimit - returns the current overdraft limit
-     *
-     * @return double
-     */
-    public function getOverdraftLimit()
-    {
-        return (double) $this->overdraftLimit;
-    }
-    
+
     /**
      * hasOverdraft - whether this account has a overdraft
      *
@@ -86,6 +72,6 @@ class CurrentAccount extends \Cilex\Bank\Account
      */
     public function hasOverdraft()
     {
-        return ($this->overdraftLimit > 0)? true : false;
+        return ($this->overdraft !== null) ? $this->overdraft->isEnabled(): false;
     }
 }

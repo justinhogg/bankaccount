@@ -38,7 +38,7 @@ abstract class Account {
      */
     public function getBalance()
     {
-        return (double) money_format('%.2n',$this->totalBalance);
+        return (double) $this->totalBalance;
     }
     
     /**

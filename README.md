@@ -13,13 +13,14 @@ Install dependencies: php composer.phar install
 
 *account*
 
-__account:open__ - Open a new bank account.
+__account:open__ - Open a new bank account. Set an overdraft. Deposit and withdraw from the account.
 
-To run these commands: __php bank.php account:open [--balance --overdraft]__ from the root directory.
+To run this command: __php bank.php account:open [--balance --overdraft]__ from the root directory.
 
 ### Options
 
 __--balance__ - Return the balance of the account.
+
 __--overdraft__ - Returns the overdraft limit of the account.
 
 ### Unit Tests

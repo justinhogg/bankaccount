@@ -13,7 +13,7 @@ Install dependencies: php composer.phar install
 
 *account*
 
-*__account:open__ - Open a new bank account.
+__account:open__ - Open a new bank account.
 
 To run these commands: __php bank.php account:open__ from the root directory.
 

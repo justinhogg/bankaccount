@@ -1,6 +1,6 @@
 <?php
 /**
- * Description of AccountCommand
+ * Description of AccountOpenCommand
  *
  * @author jhogg
  */

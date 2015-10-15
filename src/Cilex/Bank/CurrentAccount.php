@@ -9,7 +9,7 @@ namespace Cilex\Bank;
 
 class CurrentAccount extends \Cilex\Bank\Account
 {
-    protected $overdraftLimit   = 0;
+    protected $overdraftLimit   = 0.00;
     
     public function __construct($accountNumber) 
     {
@@ -80,7 +80,7 @@ class CurrentAccount extends \Cilex\Bank\Account
     }
     
     /**
-     * hasOverdraft - whther this account has a overdraft
+     * hasOverdraft - whether this account has a overdraft
      *
      * @return boolean
      */

@@ -76,9 +76,9 @@ class AccountOpenCommand extends Command
         
         $accountType    = $input->getArgument(self::ARGUMENT_ACCOUNT_TYPE);
         $accountNumber  = $input->getArgument(self::ARGUMENT_ACCOUNT_NUMBER);
-        $depositAmount  = money_format('%.2n', $input->getArgument(self::ARGUMENT_DEPOSIT_AMOUNT));
-        $overdraftAmount= money_format('%.2n', $input->getArgument(self::ARGUMENT_OVERDRAFT_AMOUNT));
-        $withdrawAmount = money_format('%.2n', $input->getArgument(self::ARGUMENT_WITHDRAW_AMOUNT));
+        $depositAmount  = round($input->getArgument(self::ARGUMENT_DEPOSIT_AMOUNT), 2);
+        $overdraftAmount= round($input->getArgument(self::ARGUMENT_OVERDRAFT_AMOUNT), 2);
+        $withdrawAmount = round($input->getArgument(self::ARGUMENT_WITHDRAW_AMOUNT), 2);
         
         //create a new account
         switch($accountType) {
